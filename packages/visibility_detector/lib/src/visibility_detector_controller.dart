@@ -25,6 +25,9 @@ class VisibilityDetectorController {
   /// should call [notifyNow] explicitly to flush them if desired.
   Duration updateInterval = const Duration(milliseconds: 500);
 
+  /// Whether widget position changes should trigger the callback
+  bool reportPositionChanges = false;
+
   /// Forces firing all pending visibility callbacks immediately.
   ///
   /// This might be desirable just prior to tearing down the widget tree (such

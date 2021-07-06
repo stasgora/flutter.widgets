@@ -8,6 +8,7 @@ import 'dart:math' show max;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:visibility_detector/src/visibility_detector_controller.dart';
 
 import 'render_sliver_visibility_detector.dart';
 import 'render_visibility_detector.dart';
@@ -127,9 +128,14 @@ class VisibilityInfo {
     assert(clipRect != null);
 
     // Compute the intersection in the widget's local coordinates.
-    final visibleBounds = widgetBounds.overlaps(clipRect)
-        ? widgetBounds.intersect(clipRect).shift(-widgetBounds.topLeft)
+    final visible = widgetBounds.overlaps(clipRect);
+    var visibleBounds = visible
+        ? widgetBounds.intersect(clipRect)
         : Rect.zero;
+    var sizeOnly = !VisibilityDetectorController.instance.reportPositionChanges;
+    if (visible && sizeOnly) {
+      visibleBounds = visibleBounds..shift(-widgetBounds.topLeft);
+    }
 
     return VisibilityInfo(
         key: key, size: widgetBounds.size, visibleBounds: visibleBounds);
